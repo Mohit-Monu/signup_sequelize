@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form id="form">
+        <label>Name:</label>
+        <input type="text" id="nam" required>
+        <label>email:</label>
+        <input type="text" id="emai" required>
+        <label>password:</label>
+        <input type="text" id="passwor" required>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.getElementById('form').addEventListener('submit', adduser);
+
+    async function adduser(e) {
+        var name = document.getElementById('nam').value
+        var email = document.getElementById('emai').value
+        var password = document.getElementById('passwor').value
+        e.preventDefault();
+        const config = await {
+            url: "http://localhost:3000/user/signup",
+            method: "POST",
+            data: {
+                'name': name,
+                'email': email,
+                'password': password
+            }
+        }
+        const res = await axios(config)
+    }
+</script>
+
+</html>
