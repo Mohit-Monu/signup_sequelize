@@ -16,6 +16,7 @@
         <input type="text" id="emai" required>
         <label>password:</label>
         <input type="text" id="passwor" required>
+        <h2 id="emailalread"></h2>
         <input type="submit" value="Submit">
     </form>
 </body>
@@ -24,20 +25,37 @@
     document.getElementById('form').addEventListener('submit', adduser);
 
     async function adduser(e) {
+        e.preventDefault();
         var name = document.getElementById('nam').value
         var email = document.getElementById('emai').value
         var password = document.getElementById('passwor').value
-        e.preventDefault();
-        const config = await {
-            url: "http://localhost:3000/user/signup",
-            method: "POST",
-            data: {
-                'name': name,
-                'email': email,
-                'password': password
+        const searcha = await axios.get('http://localhost:3000/user/search');
+        var count = 0;
+        await searcha.data.forEach(element => {
+            if (element.email == email) {
+                count++;
+                var emailalready = document.getElementById('emailalread')
+                emailalready.innerHTML="Email Already exist"
+                emailalready.style.color='red'
+                
+                console.log('Email Already exist ')
+
             }
+        });
+        if (count == 0) {
+            const config = await {
+                url: "http://localhost:3000/user/signup",
+                method: "POST",
+                data: {
+                    'name': name,
+                    'email': email,
+                    'password': password
+                }
+            }
+            const data = await axios(config)
+            console.log("updated")
         }
-        const res = await axios(config)
+
     }
 </script>
 

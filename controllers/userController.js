@@ -1,10 +1,18 @@
 const USERS=require('../user');
+const searchUser=async function(req,res){
+    try{
+        const search=await USERS.findAll()
+        res.send(search)
+
+    }catch(err){
+        console.log(err)
+    }
+}
 const adduser=async function(req,res){
     try{
         const name1=req.body.name;
         const email1=req.body.email;
         const password1=req.body.password;
-
         console.log(name1,email1,password1)
         const data=await USERS.create({
             name:name1,
@@ -17,4 +25,4 @@ const adduser=async function(req,res){
         console.log(err);
     }
 }
-module.exports=adduser;
+module.exports={adduser,searchUser};
