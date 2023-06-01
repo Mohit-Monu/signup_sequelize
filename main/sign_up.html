@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <title>Signup</title>
     <link rel="stylesheet" href="../public/signup.css">
 </head>
+
 <body>
     <form id="form">
         <div class="login-box">
@@ -38,33 +40,39 @@
     document.getElementById('form').addEventListener('submit', adduser);
     async function adduser(e) {
         e.preventDefault();
+
         var name = document.getElementById('nam').value
         var email = document.getElementById('emai').value
         var password = document.getElementById('passwor').value
-        const searcha = await axios.get('http://localhost:3000/user/search');
-        var count = 0;
-        await searcha.data.forEach(element => {
-            if (element.email == email) {
-                count++;
+
+        const config = await {
+            url: "http://localhost:3000/user/signup",
+            method: "POST",
+            data: {
+                'name': name,
+                'email': email,
+                'password': password
+            }
+        }
+        await axios(config)
+            .then((data) => {
+                console.log(data)
+                if (data.status == 201) {
+
+                    var emailalready = document.getElementById('emailalread')
+                    emailalready.innerHTML = "account created successfully"
+                    emailalready.style.color = 'green'
+                    console.log("updated")
+
+                }
+            }).catch((err) => {
                 var emailalready = document.getElementById('emailalread')
                 emailalready.innerHTML = "Email Already exist"
                 emailalready.style.color = 'red'
-                console.log('Email Already exist ')
-            }
-        });
-        if (count == 0) {
-            const config = await {
-                url: "http://localhost:3000/user/signup",
-                method: "POST",
-                data: {
-                    'name': name,
-                    'email': email,
-                    'password': password
-                }
-            }
-            const data = await axios(config)
-            console.log("updated")
-        }
+                console.log('Email Already exist')
+            })
+
     }
 </script>
+
 </html>

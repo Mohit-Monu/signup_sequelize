@@ -1,28 +1,61 @@
-const USERS=require('../user');
-const searchUser=async function(req,res){
-    try{
-        const search=await USERS.findAll()
-        res.send(search)
+const USERS = require("../user");
+async function login (req, res) {
+  try {
+    const email1 =await req.body.email;
+    const password1 =await req.body.password;
+    const search = await USERS.findAll();
+    var count = 0;
+    const data1={email1,password1}
+    await search.forEach((element) => {
+      if (element.email == email1) {
+        count++;
+        if(element.password==password1){
+          count++
+          res.send("Logged in Successfully");
+        }
+      }
+      
+    });
+    if(count==0){
+      res.status(404)
+      res.send("User not found")
 
-    }catch(err){
-        console.log(err)
+    }else if (count==1){
+      res.status(401).json({data1});
     }
-}
-const adduser=async function(req,res){
-    try{
-        const name1=req.body.name;
-        const email1=req.body.email;
-        const password1=req.body.password;
-        console.log(name1,email1,password1)
-        const data=await USERS.create({
-            name:name1,
-            email:email1,
-            password:password1
-        })
-        res.status(201).json({data})
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+ async function adduser (req, res) {
+  try {
+    const name1 = await req.body.name;
+    const email1 =await req.body.email;
+    const password1 =await req.body.password;
+    const search = await USERS.findAll();
+    var count = 0;
+    const data1={name1,email1,password1}
+    await search.forEach((element) => {
+      if (element.email == email1) {
+        count++;
+        res.statusCode=403;
+        res.send("email exist")
+
+      }
+    });
+    if (count == 0) {
+      const data=await USERS.create({
+        name: name1,
+        email: email1,
+        password: password1,
+      });
+      console.log(name1, email1, password1);
+      res.statusCode=201
+      res.send("updated")
     }
-    catch(err){
-        console.log(err);
-    }
-}
-module.exports={adduser,searchUser};
+  } catch (err) {
+    console.log(err)
+  }
+};
+module.exports = { adduser, login };
