@@ -1,19 +1,28 @@
 const express=require('express')
 const cors=require('cors');
+const User=require('./models/user')
+const Expense=require('./models/expenses')
+
 const bodyParser=require('body-parser');
 const sequelize=require('./database')
-const adminRoutes=require('./routes/admin')
+const userRoutes=require('./routes/users')
+const expensesRoutes=require('./routes/expenses')
+
 const app=express()
 app.use(cors())
 app.use(express.json()); 
 app.use(bodyParser.urlencoded({ extended: false  }));
 
 
-app.use(adminRoutes);
+app.use(userRoutes);
+app.use(expensesRoutes);
+
+User.hasMany(Expense);
+Expense.belongsTo(User);
+
 
 sequelize.sync()
 .then((res)=>{
-    console.log(res);
     app.listen(3000);
 }).catch((err)=>{
     console.log(err);

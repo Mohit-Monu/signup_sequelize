@@ -63,6 +63,7 @@
                 wrongpassword.innerHTML = "Logged in Successfully"
                 wrongpassword.style.color = 'green'
                 console.log("logged in")
+                localStorage.setItem('token',searcha.data.token)
                 window.location.href="./expenses.html"
             }).catch((err) => {
                 if (err.response.status == 404) {
@@ -77,5 +78,4 @@
             })
     }
 </script>
-
 </html>

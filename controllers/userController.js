@@ -1,11 +1,17 @@
 const bcrypt = require("bcrypt");
-const USERS = require("../user");
+const jwt=require('jsonwebtoken');
+const USERS = require("../models/user");
+
+function  generateAccessTocken(id,name){
+  return jwt.sign({userId:id,userName:name},'12345')
+}
+
 async function login(req, res) {
   try {
     const email1 = await req.body.email;
     var password1 = await req.body.password;
 
-    const search = await USERS.users.findAll();
+    const search = await USERS.findAll();
     var count = 0;
     await search.forEach((element) => {
       if (element.email == email1) {
@@ -14,19 +20,18 @@ async function login(req, res) {
           if (result === true) {
             count++;
             console.log("logged in");
-            res.send("logged in successfully");
+            res.status(200).json({message:"logged in successfully",token: generateAccessTocken(element.id,element.name)})
+
           } else if (result === false) {
             console.log("wrong password");
-            res.status(401).json();
+            res.status(401).json({message:"wrong password"});
           }
         });
       }
     });
     if (count == 0) {
       console.log("wrong email");
-
-      res.status(404);
-      res.send("User not found");
+      res.status(404).json({message:"User not found"})
     }
   } catch (err) {
     console.log(err);
@@ -37,16 +42,14 @@ async function adduser(req, res) {
     const name1 = await req.body.name;
     const email1 = await req.body.email;
     var password1 = await req.body.password;
-    const search = await USERS.users.findAll();
+    const search = await USERS.findAll();
     var count = 0;
     const data1 = { name1, email1, password1 };
     await search.forEach((element) => {
       if (element.email == email1) {
         count++;
         console.log("email already exist")
-
-        res.statusCode = 403;
-        res.send("email exist");
+        res.status(403).json({message:"email exist"})
       }
     });
     if (count == 0) {
@@ -56,7 +59,7 @@ async function adduser(req, res) {
         if (err) {
           console.log(err);
         }
-        const data = await USERS.users.create({
+        const data = await USERS.create({
           name: name1,
           email: email1,
           password: password1,
@@ -64,41 +67,12 @@ async function adduser(req, res) {
         console.log(name1, email1, password1);
         console.log("updated");
 
-        res.statusCode = 201;
-        res.send("updated");
+        res.status(201).json({message:"updated"})
       });
     }
   } catch (err) {
     console.log(err);
   }
 }
-async function addexpense(req,res){
-  try{
-    const amount=req.body.amt;
-    const description=req.body.des;
-    const category=req.body.cat;
 
-    await USERS.expenses.create({
-      expenseamount:amount,
-      category:category,
-      description:description
-    })
-    res.send("expenses uploaded")
-  }catch(err){
-    console.log(err);
-  }
-
-}
-async function loadexpense(req,res){
-  const search = await USERS.expenses.findAll();
-  res.send(search);
-}
-
-async function delexpenses(req,res){
-  const id1=req.body.id;
-  const count=await USERS.expenses.destroy({where:{id:id1}});
-  res.send("deleted");
-}
-
-
-module.exports = { adduser, login,addexpense,loadexpense,delexpenses };
+module.exports = { adduser, login};
