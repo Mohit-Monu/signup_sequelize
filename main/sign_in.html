@@ -67,11 +67,11 @@
                 if (err.response.status == 404) {
                     wrongpassword.innerHTML = "User not found"
                     wrongpassword.style.color = 'red'
-                    console.log("logged in")
+                    console.log("invalid email")
                 } else if (err.response.status == 401) {
                     wrongpassword.innerHTML = "password is wrong"
                     wrongpassword.style.color = 'red'
-                    console.log("logged in")
+                    console.log("wrong password")
                 }
             })
     }
