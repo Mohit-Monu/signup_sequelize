@@ -5,7 +5,7 @@ async function login(req, res) {
     const email1 = await req.body.email;
     var password1 = await req.body.password;
 
-    const search = await USERS.findAll();
+    const search = await USERS.users.findAll();
     var count = 0;
     await search.forEach((element) => {
       if (element.email == email1) {
@@ -37,7 +37,7 @@ async function adduser(req, res) {
     const name1 = await req.body.name;
     const email1 = await req.body.email;
     var password1 = await req.body.password;
-    const search = await USERS.findAll();
+    const search = await USERS.users.findAll();
     var count = 0;
     const data1 = { name1, email1, password1 };
     await search.forEach((element) => {
@@ -56,7 +56,7 @@ async function adduser(req, res) {
         if (err) {
           console.log(err);
         }
-        const data = await USERS.create({
+        const data = await USERS.users.create({
           name: name1,
           email: email1,
           password: password1,
@@ -72,4 +72,33 @@ async function adduser(req, res) {
     console.log(err);
   }
 }
-module.exports = { adduser, login };
+async function addexpense(req,res){
+  try{
+    const amount=req.body.amt;
+    const description=req.body.des;
+    const category=req.body.cat;
+
+    await USERS.expenses.create({
+      expenseamount:amount,
+      category:category,
+      description:description
+    })
+    res.send("expenses uploaded")
+  }catch(err){
+    console.log(err);
+  }
+
+}
+async function loadexpense(req,res){
+  const search = await USERS.expenses.findAll();
+  res.send(search);
+}
+
+async function delexpenses(req,res){
+  const id1=req.body.id;
+  const count=await USERS.expenses.destroy({where:{id:id1}});
+  res.send("deleted");
+}
+
+
+module.exports = { adduser, login,addexpense,loadexpense,delexpenses };
