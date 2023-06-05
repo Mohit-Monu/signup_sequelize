@@ -1,4 +1,6 @@
 const expenses = require("../models/expenses");
+const USERS = require("../models/user");
+
 
 async function addexpense(req,res){
     try{
@@ -11,7 +13,7 @@ async function addexpense(req,res){
         expenseamount:amount,
         category:category,
         description:description,
-        userId:req.user
+        userId:req.user.id
       })
       res.send("expenses uploaded")
     }catch(err){
@@ -20,8 +22,10 @@ async function addexpense(req,res){
   
   }
   async function loadexpense(req,res){
-    const search = await expenses.findAll({where:{userId:req.user}});
-    res.send(search);
+    const search = await expenses.findAll({where:{userId:req.user.id}})
+    const user1=await USERS.findAll({where:{id:req.user.id}})
+    res.status(202).json({result:search,user:user1})
+
   }
   
   async function delexpenses(req,res){

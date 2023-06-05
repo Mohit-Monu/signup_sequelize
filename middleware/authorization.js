@@ -5,8 +5,8 @@ async function authenticate(req,res,next){
     try{
         const token=req.header('Authorization');
         const user= jsw.verify(token,'12345');
-        User.findByPk(user.userId).then(user=>{
-            req.user=user.id
+        await User.findByPk(user.userId).then(user=>{
+            req.user=user
             next()
         })
     }catch(err){

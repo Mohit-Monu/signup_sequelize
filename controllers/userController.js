@@ -63,6 +63,7 @@ async function adduser(req, res) {
           name: name1,
           email: email1,
           password: password1,
+          // isPremiumUser:'false'
         });
         console.log(name1, email1, password1);
         console.log("updated");
