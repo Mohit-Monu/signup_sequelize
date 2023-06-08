@@ -7,13 +7,14 @@ async function addexpense(req,res){
       const amount=req.body.amt;
       const description=req.body.des;
       const category=req.body.cat;
+      const id=req.user.id;
 
-  
+      console.log(req.user.id)
       await expenses.create({
         expenseamount:amount,
         category:category,
         description:description,
-        userId:req.user.id
+        userId:id
       })
       res.send("expenses uploaded")
     }catch(err){

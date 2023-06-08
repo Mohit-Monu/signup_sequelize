@@ -4,13 +4,12 @@ const User=require('./models/user')
 const Expense=require('./models/expenses')
 const Order=require('./models/order')
 
-
 const bodyParser=require('body-parser');
 const sequelize=require('./database')
 const userRoutes=require('./routes/users')
 const expensesRoutes=require('./routes/expenses')
 const orderRoutes=require('./routes/purchase')
-
+const premiumRoutes=require('./routes/premium')
 
 const app=express()
 app.use(cors())
@@ -21,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false  }));
 app.use(userRoutes);
 app.use(expensesRoutes);
 app.use(orderRoutes);
+app.use(premiumRoutes);
 
 
 User.hasMany(Expense);
