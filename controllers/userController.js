@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt=require('jsonwebtoken');
 const USERS = require("../models/user");
+const sequelize=require('../database')
+
 
 function  generateAccessTocken(id,name){
   return jwt.sign({userId:id,userName:name},'12345')
@@ -10,7 +12,6 @@ async function login(req, res) {
   try {
     const email1 = await req.body.email;
     var password1 = await req.body.password;
-
     const search = await USERS.findAll();
     var count = 0;
     await search.forEach((element) => {
@@ -38,6 +39,8 @@ async function login(req, res) {
   }
 }
 async function adduser(req, res) {
+  const t = await sequelize.transaction();
+
   try {
     const name1 = await req.body.name;
     const email1 = await req.body.email;
@@ -63,10 +66,18 @@ async function adduser(req, res) {
           name: name1,
           email: email1,
           password: password1,
-          // isPremiumUser:'false'
-        });
-        console.log(name1, email1, password1);
-        console.log("updated");
+          total_exp:0,
+          
+        },{transaction:t}).then(async()=>{
+          console.log(name1, email1, password1);
+          console.log("updated");
+          await t.commit();
+
+        }).catch(async(err)=>{
+          await t.rollback();
+
+        })
+
 
         res.status(201).json({message:"updated"})
       });

@@ -20,6 +20,9 @@ const users=sequelize.define('users',
     isPremiumUser:{
         type:Sequelize.BOOLEAN,
         defaultValue:false
+    },    
+    total_exp:{
+        type:Sequelize.INTEGER,
     }
 })
 

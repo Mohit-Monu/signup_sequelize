@@ -147,7 +147,6 @@
       butt2.className = "buypre-btn"
       boax.appendChild(butt);
       boax.appendChild(butt2);
-
       document.getElementById('show_leader').addEventListener('click', showleaderf);
     }
     var count = 0;
@@ -233,13 +232,28 @@
   }
   async function delall() {
     return new Promise((resolve, reject) => {
-      expdet.innerHTML = ""
+
+      // var show_leader1 = document.getElementById("show_leader")
+      // if (show_leader1.innerHTML == 'Hide Leaderboard') {
+      //   show_leader1.innerHTML = "Show Leaderboard"
+      //   leadheadhead.innerHTML = ""
+      //   thead2.innerHTML = ""
+      //   box2.innerHTML = ""
+      //   expdet.innerHTML = ""
+      // }
+
 
       while (thead.firstChild) {
         thead.removeChild(thead.firstChild);
       }
+      while (thead2.firstChild) {
+        thead2.removeChild(thead2.firstChild);
+      }
       while (box.firstChild) {
         box.removeChild(box.firstChild);
+      }
+       while (box2.firstChild) {
+        box2.removeChild(box2.firstChild);
       }
       while (boax.firstChild) {
         boax.removeChild(boax.firstChild);
@@ -292,11 +306,11 @@
     const data = await axios.get("http://localhost:3000/premium/showleaderboard", { headers: { 'Authorization': token } })
     var count = 0;
     var show_leader1 = document.getElementById("show_leader")
-    if(show_leader1.innerHTML=="Hide Leaderboard"){
+    if (show_leader1.innerHTML == "Hide Leaderboard") {
       show_leader1.innerHTML = "Show Leaderboard"
       leadheadhead.innerHTML = ""
-      thead2.innerHTML=""
-      box2.innerHTML=""
+      thead2.innerHTML = ""
+      box2.innerHTML = ""
       return;
     }
     data.data.user.forEach((element) => {
@@ -322,7 +336,7 @@
       var td2 = document.createElement('td');
       td0.innerHTML = count;
       td1.innerHTML = element.name;
-      td2.innerHTML = element.total_cost;
+      td2.innerHTML = element.total_exp;
       if (count % 2 == 0) {
         tr.className = "active-row"
       }
@@ -334,4 +348,5 @@
     });
   }
 </script>
+
 </html>
