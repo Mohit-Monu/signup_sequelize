@@ -50,7 +50,7 @@
       <header id="exp"></header>
     </div>
     <table class="styled-table" id="styled-table">
-       <!-- <thead>
+      <!-- <thead>
         <tr>
           <th>Sl.no</th>
           <th>Amount</th>
@@ -60,7 +60,7 @@
         </tr>
       </thead> -->
       <tbody class="boxx" id="boxx">
-      <!-- <tr>
+        <!-- <tr>
           <td>Dom</td>
           <td>6000</td>
           <td>6000</td>
@@ -79,7 +79,7 @@
       <header id="leadhead"></header>
     </div>
 
-    <table class="styled-table">
+    <table class="styled-table" id="styled-table2">
       <!-- <thead>
        <tr>
          <th>Sl.no</th>
@@ -89,8 +89,8 @@
          <th>Delete</th>
        </tr>
      </thead> -->
-     <tbody class="boxx">
-     <!-- <tr>
+      <tbody class="boxx" id="boxx2">
+        <!-- <tr>
          <td>Dom</td>
          <td>6000</td>
          <td>6000</td>
@@ -101,23 +101,25 @@
          <td>5150</td>
          <td>6000</td>
        </tr> -->
-     </tbody>
-   </table>
+      </tbody>
+    </table>
   </center>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   var box = document.querySelector("#boxx");
-  var box = document.querySelector("#boxx");
+  var box2 = document.querySelector("#boxx2");
   var thead = document.createElement('thead');
   var thead2 = document.createElement('thead');
 
-  var expdet=document.getElementById('exp');
-  var leadheadhead=document.getElementById('leadhead');
+  var expdet = document.getElementById('exp');
+  var leadheadhead = document.getElementById('leadhead');
 
 
   var tablee = document.querySelector('#styled-table')
+  var tableee = document.querySelector('#styled-table2')
+
   document.getElementById('addForm').addEventListener('submit', addele);
   const boax = document.getElementById('buydiv');
   window.addEventListener('DOMContentLoaded', () => {
@@ -145,32 +147,33 @@
       butt2.className = "buypre-btn"
       boax.appendChild(butt);
       boax.appendChild(butt2);
+
       document.getElementById('show_leader').addEventListener('click', showleaderf);
     }
     var count = 0;
     result.forEach(element => {
       count++;
-      if(count==1){
-      expdet.innerHTML="Here is all your expenses"
-      var tr0 = document.createElement('tr');
-      var th0 = document.createElement('th');
-      th0.innerHTML="Srl.no"
-      var th1 = document.createElement('th');
-      th1.innerHTML="Amount"
-      var th2 = document.createElement('th');
-      th2.innerHTML="Description"
-      var th3 = document.createElement('th');
-      th3.innerHTML="Category"
-      var th4 = document.createElement('th');
-      th4.innerHTML="Button"
-      thead.className="thead"
-      tablee.appendChild(thead);
-      thead.appendChild(tr0);
-      tr0.appendChild(th0);
-      tr0.appendChild(th1);
-      tr0.appendChild(th2);
-      tr0.appendChild(th3);
-      tr0.appendChild(th4);
+      if (count == 1) {
+        expdet.innerHTML = "Here is all your expenses"
+        var tr0 = document.createElement('tr');
+        var th0 = document.createElement('th');
+        th0.innerHTML = "Srl.no"
+        var th1 = document.createElement('th');
+        th1.innerHTML = "Amount"
+        var th2 = document.createElement('th');
+        th2.innerHTML = "Description"
+        var th3 = document.createElement('th');
+        th3.innerHTML = "Category"
+        var th4 = document.createElement('th');
+        th4.innerHTML = "Button"
+        thead.className = "thead"
+        tablee.appendChild(thead);
+        thead.appendChild(tr0);
+        tr0.appendChild(th0);
+        tr0.appendChild(th1);
+        tr0.appendChild(th2);
+        tr0.appendChild(th3);
+        tr0.appendChild(th4);
       }
       var tr = document.createElement('tr');
       var td0 = document.createElement('td');
@@ -230,8 +233,8 @@
   }
   async function delall() {
     return new Promise((resolve, reject) => {
-      expdet.innerHTML=""
-      
+      expdet.innerHTML = ""
+
       while (thead.firstChild) {
         thead.removeChild(thead.firstChild);
       }
@@ -284,30 +287,51 @@
         })
       })
   }
-  async function showleaderf(){
+  async function showleaderf() {
     const token = localStorage.getItem('token');
-    const data =await axios.get("http://localhost:3000/premium/showleaderboard", { headers: { 'Authorization': token } })
-    var count=0;
-    data.data.user.forEach((element)=>{
+    const data = await axios.get("http://localhost:3000/premium/showleaderboard", { headers: { 'Authorization': token } })
+    var count = 0;
+    var show_leader1 = document.getElementById("show_leader")
+    if(show_leader1.innerHTML=="Hide Leaderboard"){
+      show_leader1.innerHTML = "Show Leaderboard"
+      leadheadhead.innerHTML = ""
+      thead2.innerHTML=""
+      box2.innerHTML=""
+      return;
+    }
+    data.data.user.forEach((element) => {
       count++;
-      if(count==1){
-      leadheadhead.innerHTML="Here is the Leaderboard"
-      var tr0 = document.createElement('tr');
-      var th0 = document.createElement('th');
-      th0.innerHTML="Srl.no"
-      var th1 = document.createElement('th');
-      th1.innerHTML="Name"
-      var th2 = document.createElement('th');
-      th2.innerHTML="Total Expenses"
-      tablee.appendChild(thead2);
-      thead2.appendChild(tr0);
-      tr0.appendChild(th0);
-      tr0.appendChild(th1);
-      tr0.appendChild(th2);
+      if (count == 1) {
+        leadheadhead.innerHTML = "Here is the Leaderboard"
+        var tr0 = document.createElement('tr');
+        var th0 = document.createElement('th');
+        th0.innerHTML = "Srl.no"
+        var th1 = document.createElement('th');
+        th1.innerHTML = "Name"
+        var th2 = document.createElement('th');
+        th2.innerHTML = "Total Expenses"
+        tableee.appendChild(thead2);
+        thead2.appendChild(tr0);
+        tr0.appendChild(th0);
+        tr0.appendChild(th1);
+        tr0.appendChild(th2);
       }
-    })
-
+      var tr = document.createElement('tr');
+      var td0 = document.createElement('td');
+      var td1 = document.createElement('td');
+      var td2 = document.createElement('td');
+      td0.innerHTML = count;
+      td1.innerHTML = element.name;
+      td2.innerHTML = element.total_cost;
+      if (count % 2 == 0) {
+        tr.className = "active-row"
+      }
+      box2.appendChild(tr);
+      tr.appendChild(td0);
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+      show_leader1.innerHTML = "Hide Leaderboard"
+    });
   }
 </script>
-
 </html>

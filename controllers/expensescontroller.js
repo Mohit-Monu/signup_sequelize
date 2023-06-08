@@ -14,7 +14,11 @@ async function addexpense(req,res){
         expenseamount:amount,
         category:category,
         description:description,
-        userId:id
+        userId:id,
+      })
+      await USERS.findOne({where:{id:id}}).then((user)=>{
+        const exp=user.total_exp
+        user.update({total_exp:exp+amount/1})
       })
       res.send("expenses uploaded")
     }catch(err){
@@ -31,7 +35,16 @@ async function addexpense(req,res){
   
   async function delexpenses(req,res){
     const id1=req.params.id;
-    const count=await expenses.destroy({where:{id:id1}});
+    var amount=0;
+    await expenses.findOne({where:{id:id1}}).then((deletedExpense)=>{
+      amount=deletedExpense.expenseamount;
+      deletedExpense.destroy()
+    })
+    console.log(amount)
+    await USERS.findOne({where:{id:req.user.id}}).then((user)=>{
+      const exp=user.total_exp
+      user.update({total_exp:exp-amount/1})
+    })
     res.send("deleted");
   }
   
