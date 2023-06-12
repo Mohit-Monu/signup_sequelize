@@ -3,10 +3,8 @@ const Order = require("../models/order");
 
 function buymembership(req,res){
     var rzp=new Razorpay({
-        // key_id:process.env.RAZORPAY_KEY_ID,
-        // key_secret:process.env.RAZORPAY_KEY_SECRET
-        key_id:"rzp_test_7khtyOfKUtzyxo",
-        key_secret:"kZ2f23u1cnk6J8IZdZtatTrr"
+         key_id:process.env.RAZORPAY_KEY_ID,
+         key_secret:process.env.RAZORPAY_KEY_SECRET
     })
     const amount=25000;
     rzp.orders.create({amount,currency:"INR"},(err,order)=>{
